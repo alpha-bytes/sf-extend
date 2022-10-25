@@ -1,0 +1,26 @@
+{
+  "name": "sfdxtend",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sfdx",
+    "sfdx-plugin",
+    "extends",
+    "extensions"
+  ],
+  "oclif": {
+    "hooks": {
+      "prerun": "./dist/hooks/prerun.js",
+      "postrun": "./dist/hooks/postrun.js"
+    }
+  },
+  "author": "kev4ev",
+  "license": "MIT",
+  "dependencies": {
+    "@oclif/config": "^1.18.5"
+  }
+}
