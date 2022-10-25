@@ -1,6 +1,7 @@
-const { Hook } = require('@oclif/config');
-
 module.exports.default = async function(options){
-    console.log('got it');
-    debugger;
+    let { argv, Command } = options;
+    if(argv.includes('--extend')){
+        await this.log(argv);
+        await this.exit();
+    }
 }
