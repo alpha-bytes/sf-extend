@@ -1,26 +1,34 @@
 {
   "name": "sfdxtend",
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Extend sfdx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "sfdx",
     "sfdx-plugin",
-    "extends",
+    "extend",
     "extensions"
   ],
   "oclif": {
     "hooks": {
       "prerun": "./dist/hooks/prerun.js",
       "postrun": "./dist/hooks/postrun.js"
+    },
+    "commands": "./dist/commands",
+    "topics": {
+      "extend": {
+        "description": "Extend sfdx"
+      }
     }
   },
   "author": "kev4ev",
   "license": "MIT",
   "dependencies": {
-    "@oclif/config": "^1.18.5"
+    "@oclif/config": "^1.18.5",
+    "@salesforce/command": "^5.2.16",
+    "yeoman-environment": "^3.12.1",
+    "generator-sfdxtend": "^0.1.0"
   }
 }

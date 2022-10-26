@@ -1,12 +1,12 @@
 # Extend `sfdx`
 
-`sfdxtends` provides a lightweight means of extending the capabilities of core `sfdx` commands. Enable your custom logic to run before or after any cli command.
+`sfdxtend` provides a lightweight means of extending the capabilities of core `sfdx` commands. Enable your custom extensions to run before or after any cli command.
 
 ## Installation
-Add `sfdxtends` to your cli as you would any `sfdx` plugin:
+Add `sfdxtend` to your cli as you would any `sfdx` plugin:
 
 ```sh
-sfdx plugins:install @alpha-bytes/sfdxtends
+sfdx plugins:install @alpha-bytes/sfdxtend
 ```
 
 ## Usage
@@ -32,20 +32,20 @@ where...
 An extension is any local module or npm-installable whose default export is class that extends the `Sfdxtension` class: 
 
 ```js
-const Sfdxtension = require('@alpha-bytes/sfdxtends');
+const Sfdxtension = require('@alpha-bytes/sfdxtend');
 module.exports.default = class MyExtension extends Sfdxtension{
     // your code...
 }
 ```
 
-To get you started quickly `sfdxtends` appends a generator command to `sfdx` which will scaffold a new extension for you. Run the following from the directory where you want to begin building:
+To get you started quickly `sfdxtend` appends a generator command to `sfdx` which will scaffold a new extension for you. Run the following from the directory where you want to begin building:
 
 ```sh
 sfdx xtensions:generate [PATH]
 ```
 
 ### Extension Architecture
-Under the hood `sfdxtends` utilizes the popular **Yeomanjs** scaffolding library. Salesforce utilizes this as well when you run commands such as `sfdx force:project:create` and `sfdx plugins:generate`.
+Under the hood `sfdxtend` utilizes the popular **Yeomanjs** scaffolding library. Salesforce utilizes this as well when you run commands such as `sfdx force:project:create` and `sfdx plugins:generate`.
 
 The extension classes you'll create extend the `Sfdxtension` class which itself extends the Yeoman `Generator` class, so all of the smart functionality available to you therein is accessible in your class as well.
 
@@ -60,7 +60,13 @@ To search existing public extensions simply run the following command:
 sfdx xtensions:find
 ```
 
+<!-- ### Community Extensions -->
+
+## Examples
+
+Coming soon.
+
 ## FAQ
 
 **How is an extension different than a plugin?**\
-_An `sfdx` plugin adds additional topics and commands to the sfdx cli. An `sfdxtends` extension, on the other hand, allows you to execute additional logic before/after core commands without adding topics or commands that users must invoke manually._
+_An `sfdx` plugin adds additional topics and commands to the sfdx cli. An `sfdxtend` extension, on the other hand, allows you to automatically execute logic before/after core commands without the need for manual user invocation._
