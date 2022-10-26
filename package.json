@@ -1,5 +1,5 @@
 {
-  "name": "sfdxtend",
+  "name": "@alpha-bytes/sfdxtend",
   "version": "0.1.0",
   "description": "Extend sfdx",
   "scripts": {
@@ -29,6 +29,6 @@
     "@oclif/config": "^1.18.5",
     "@salesforce/command": "^5.2.16",
     "yeoman-environment": "^3.12.1",
-    "generator-sfdxtend": "^0.1.0"
+    "@alpha-bytes/generator-sfdxtend": "^0.1.0"
   }
 }
