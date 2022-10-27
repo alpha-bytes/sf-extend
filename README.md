@@ -15,14 +15,14 @@ After installing the plugin you'll be able to extend existing `sfdx` commands. Y
 ```sh
 # explicit syntax
 sfdx <command> --extend <localPathOrNpmPackage>
-    [--[after|before]] 
-    [--[last|first|position]] 
-    [--[global|project]] 
+    [--after|before]
+    [--last|first|position=<integer>]
+    [--global|project]
 # example - @alpha-bytes/sfdxtend-prettier-apex will run: 
 # - *before* 'force:source:deploy', and
 # - will run *first* among all attached extensions, and
 # - will run only when the command is executed in the current *project* (unless added globally separately)
-sfdx force:source:deploy --extend @alpha-bytes/sfdxtend-prettier-apex --before --0 --project
+sfdx force:source:deploy --extend @alpha-bytes/sfdxtend-prettier-apex --before --position=0 --project
 
 # implicit syntax
 sfdx extend <localPathOrNpmPackage>
@@ -34,7 +34,7 @@ where...
 - `command` is any sfdx command
 - `localPathOrNpmPackage` is a relative path to your extension module or any supported <a href="https://docs.npmjs.com/about-packages-and-modules" target="_blank">package format</a> that npm can install
 - `after (default)` or `before` determines when your extension will run in relation to the sfdx command (prior, subsequent)
-- `last (default)`, `first` or `position` will place your extension at the top, botton, or in the indicated position of the queue of all extensions attached to the given command (`position` being an integer, i.e. `0` has the same effect as `first` in the example above)
+- `last (default)`, `first` or `position` will place your extension at the top, botton, or in the indicated position of the queue of all extensions attached to the given command (`position` being any integer, i.e. `0` has the same effect as `first` in the example above)
 - `global (default)` or `project` indicates the **scope** (see below) that your extension will be configured to run under; `
 
 ## Building Extensions
