@@ -1,3 +1,3 @@
-const Sfdxtension = require('./lib/Sfdxtension');
+const Sfdxtension = require('./lib/types/Sfdxtension');
 
 module.exports = Sfdxtension;
