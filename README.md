@@ -10,32 +10,24 @@ sfdx plugins:install @alpha-bytes/sfdxtend
 ```
 
 ## Usage
-After installing the plugin you'll be able to extend existing `sfdx` commands. You can extend them _explicitly_ or _implicitly_ as shown in the examples below. With explicit extension you define the command to be extended and the extension config. When implicitly extending, the extension itself defines its config by way of the `package.json` file (see _[Configuration](#configuration)_ below).
+After installing the plugin you'll be able to extend existing `sfdx` commands. You can extend them _explicitly_ or _implicitly_ as shown in the examples below. With explicit extension you define the command to be extended. When implicitly extending, the extension itself defines its command extensions and you will be prompted to accept or reject them (see _[Configuration](#configuration)_ below).
 
 ```sh
 # explicit syntax
-sfdx <command> --extend <localPathOrNpmPackage>
-    [--after|before]
-    [--last|first|position=<integer>]
-    [--global|project]
-# example - @alpha-bytes/sfdxtend-prettier-apex will run: 
-# - *before* 'force:source:deploy', and
-# - will run *first* among all attached extensions, and
-# - will run only when the command is executed in the current *project* (unless added globally separately)
-sfdx force:source:deploy --extend @alpha-bytes/sfdxtend-prettier-apex --before --position=0 --project
+sfdx <command> --x <localPathOrNpmPackage> [-s, --scope <scope>]
+# example - @alpha-bytes/sfdxtend-prettier-apex will run only when the command is executed in the current *project* (unless added globally separately)
+sfdx force:source:deploy --x @alpha-bytes/sfdxtend-prettier-apex --scope project
 
 # implicit syntax
-sfdx extend <localPathOrNpmPackage>
+sfdx x <localPathOrNpmPackage>
 # example
-sfdx extend @alpha-bytes/sfdxtend-polyfill
+sfdx x @alpha-bytes/sfdxtend-polyfill
 ```
 
 where...
 - `command` is any sfdx command
 - `localPathOrNpmPackage` is a relative path to your extension module or any supported <a href="https://docs.npmjs.com/about-packages-and-modules" target="_blank">package format</a> that npm can install
-- `after (default)` or `before` determines when your extension will run in relation to the sfdx command (prior, subsequent)
-- `last (default)`, `first` or `position` will place your extension at the top, botton, or in the indicated position of the queue of all extensions attached to the given command (`position` being any integer, i.e. `0` has the same effect as `first` in the example above)
-- `global (default)` or `project` indicates the **scope** (see below) that your extension will be configured to run under; `
+- `-s, --scope` is either of "global (default)" or "project" and indicates whether the extension runs every time the command is executed or only when it executes in the current sfdx project, respectively
 
 ## Building Extensions
 An extension is any local module or npm-installable whose default export is class that extends the `Sfdxtension` class: 

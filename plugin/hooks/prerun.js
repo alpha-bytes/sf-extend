@@ -1,5 +1,5 @@
-const { clean } = require('nopt');
-const addGenerator = require('../../lib/addExtension');
+const { aliases } = require('../../lib/globals');
+const ExtendCmd = require('../../plugin/commands/x/index');
 
 /**
  * @typedef {import('@salesforce/command').SfdxCommand} SfdxCommand
@@ -14,16 +14,15 @@ const addGenerator = require('../../lib/addExtension');
  */
 module.exports.default = async function(arg){
     let { argv, Command, config } = arg;
-    let pos = argv.indexOf('--extend');
+    let aliasFlags = aliases.map(alias => `--${alias}`),
+        match = aliasFlags.filter(alias => argv.indexOf(alias) > -1), 
+        pos = match.length === 0 ? -1 : argv.indexOf(match[match.length -1]);
     if(pos > -1){
-        let positional = argv.slice(pos + 1), 
-            packageOrPath = positional.shift(), 
-            sanitized = positional.map(flag => {
-                let clean = flag.replace(/\s/g, '').replace('--', '');
-                
-                return clean.indexOf('=') > -1 ? clean.split('=')[1] : clean;
-            });
-        await addGenerator(config, packageOrPath, Command, ...sanitized);
+        let positional = argv.slice(pos + 1);
+        let cmd = new ExtendCmd(positional, config);
+        cmd.targetCmd = Command;
+        cmd.setPositional(...positional);
+        await cmd.run();
         process.exit(0);
     }
 }
