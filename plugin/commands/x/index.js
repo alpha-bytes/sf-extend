@@ -28,7 +28,7 @@ class ExtendCmd extends SfdxtendCmd{
      * @param {Array<string>} positional used when explicitly extending an sfdx command
      */
     setPositional(...argv){
-        let [ packageOrPath, scope ] = argv;
+        let [ packageOrPath, scopeFlag, scope ] = argv;
         this.args = { packageOrPath }
         this.flags = { scope }
     }
