@@ -1,5 +1,5 @@
 const { aliases } = require('../../lib/globals');
-const ExtendCmd = require('../../plugin/commands/x/index');
+const ExtendCmd = require('../../plugin/commands/x/add');
 
 /**
  * @typedef {import('@salesforce/command').SfdxCommand} SfdxCommand

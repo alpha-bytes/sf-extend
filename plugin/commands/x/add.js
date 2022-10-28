@@ -1,7 +1,8 @@
 const SfdxtendCmd = require('../../../lib/types/SfdxtendCmd');
 const { flags } = require('@salesforce/command');
 const initAliases = require('../../../lib/initAliases');
-const addExtension = require('../../../lib/addExtension');
+const yo = require('../../../lib/yeoman');
+const path = require('path');
 
 class ExtendCmd extends SfdxtendCmd{
 
@@ -34,9 +35,12 @@ class ExtendCmd extends SfdxtendCmd{
     }
 
     async run(){
+        let { config } = this;
         let { packageOrPath } = this.args;
         let { scope } = this.flags;
-        await addExtension(this.config, packageOrPath, scope, this._targetCmd);
+        let extGenPath = path.resolve(__dirname, '..', '..', '..', 'internal', 'generators', 'extend', 'index.js');
+        yo.register(extGenPath, { packageOrPath, config, scope, targetCmd: this._targetCmd });
+        await yo.run();
     }
 
 }
