@@ -6,6 +6,7 @@ const requirePath = require('../../../lib/requireResolver');
 const { existsSync } = require('fs');
 const { mkdir, writeFile } = require('fs/promises');
 const path = require('path');
+const { addExtension } = require('../../../lib/prompt');
 
 function installGlobal(package){
     return new Promise((res, rej)=>{
@@ -37,9 +38,15 @@ class Extend extends Sfdxtension{
     }
 
     async initializing(){
+        // if packageOrPath is a relative path, make it absolute
+        this.packageOrPath = (()=>{
+            let given = path.resolve(process.cwd(), this.packageOrPath);
+
+            return existsSync(given) ? given : this.packageOrPath;
+        })();
         // set the sfdxtend config condiationally on scope, defaulting to project-level package.json
         let configDir = this.destinationRoot(),
-            configPath = `${configDir}/${configFileName}`;
+            configPath = `${configDir}/package.json`;
         let { global } = this.sfdxContext;
         if(global){
             configDir = (()=>{
@@ -60,9 +67,20 @@ class Extend extends Sfdxtension{
         this.rc = this.createStorage(configPath);
     }
 
-    async configuring(){
-        // write explicit configs passed by user to storage
-        
+    async prompting(){
+        // determine existing configs
+        let { lifecycle, command, global } = this.sfdxContext;
+        let { id } = command;
+        let lodashPath = `${global ? '' : 'sfdxtend.'}${lifecycle}.${id}`;
+        let cmdExtensions = this.rc.getPath(lodashPath);
+        if(!cmdExtensions){
+            cmdExtensions = [ this.packageOrPath ];
+        } else{
+            let configs = await addExtension(id, cmdExtensions);
+            cmdExtensions.splice(configs.order, 0, this.packageOrPath);
+        }
+        // set the config
+        this.rc.setPath(lodashPath, cmdExtensions);
     }
 
     async install(){
