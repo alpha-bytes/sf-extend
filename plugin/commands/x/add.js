@@ -34,12 +34,12 @@ class ExtendCmd extends SfdxtendCmd{
         this.flags = { scope }
     }
 
-    async run(){
+    async run(lifecycle){
         let { config } = this;
         let { packageOrPath } = this.args;
         let { scope } = this.flags;
         let extGenPath = path.resolve(__dirname, '..', '..', '..', 'internal', 'generators', 'extend', 'index.js');
-        yo.register(extGenPath, { packageOrPath, config, scope, targetCmd: this._targetCmd });
+        yo.register(extGenPath, { config, command: this._targetCmd, lifecycle, packageOrPath, scope });
         await yo.run();
     }
 

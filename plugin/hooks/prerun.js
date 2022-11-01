@@ -1,5 +1,6 @@
 const { aliases } = require('../../lib/globals');
 const ExtendCmd = require('../../plugin/commands/x/add');
+const { lifecycle } = require('../../lib/globals');
 
 /**
  * @typedef {import('@salesforce/command').SfdxCommand} SfdxCommand
@@ -22,7 +23,11 @@ module.exports.default = async function(arg){
         let cmd = new ExtendCmd(positional, config);
         cmd.targetCmd = Command;
         cmd.setPositional(...positional);
-        await cmd.run();
+        try{
+            await cmd.run(lifecycle.before);
+        } catch(err){
+            this.error(err);
+        }
         process.exit(0);
     }
 }
