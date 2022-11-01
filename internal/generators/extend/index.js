@@ -1,8 +1,11 @@
-const Sfdxtension = require('@alpha-bytes/sfdxtend');
-const { scopes } = require('../../../lib/globals');
+const Sfdxtension = require('../../../lib/types/Sfdxtension');
+const { configFileName } = require('../../../lib/globals');
 const cp = require('child_process');
 const validate = require('validate-npm-package-name');
 const requirePath = require('../../../lib/requireResolver');
+const { existsSync } = require('fs');
+const { mkdir, writeFile } = require('fs/promises');
+const path = require('path');
 
 function installGlobal(package){
     return new Promise((res, rej)=>{
@@ -34,29 +37,52 @@ class Extend extends Sfdxtension{
     }
 
     async initializing(){
+        // set the sfdxtend config condiationally on scope, defaulting to project-level package.json
+        let configDir = this.destinationRoot(),
+            configPath = `${configDir}/${configFileName}`;
+        let { global } = this.sfdxContext;
+        if(global){
+            configDir = (()=>{
+                let { configDir } = this.sfdxContext.config;
+                let baseName = path.basename(configDir);
+
+                return configDir.replace(baseName, 'sfdxtend');
+            })();
+            configPath = `${configDir}/${configFileName}`;
+            if(!existsSync(configDir)) await mkdir(configDir);
+        }
+        // create file if it doesn't exist
+        if(!existsSync(configPath)){
+            let content = await this.readTemplate(configFileName);
+            await writeFile(configPath, content, 'utf-8');
+        }
+        // intialize a Storage instance
+        this.rc = this.createStorage(configPath);
+    }
+
+    async configuring(){
+        // write explicit configs passed by user to storage
+        
+    }
+
+    async install(){
         let { packageOrPath } = this;
-        let { scope } = this.sfdxContext;
+        let { global } = this.sfdxContext;
         let { root } = this.sfdxContext.config;
 
-        let installResult;
+        let absPath, installResult;
         try{
             // determine if package is already installed
-            this.packageOrPath = await requirePath(packageOrPath, root, scope);
+            absPath = await requirePath(packageOrPath, root, global);
         } catch(err){
-            if(this.sfdxContext.scope === scopes.global){
-                console.log(`${this.packageOrPath} not yet installed. Installing globally.`);
+            console.log(`${this.packageOrPath} not yet installed. Installing ${global ? 'as global package' : 'as dev dependency'}.`);
+            if(this.global){
                 installResult = await installGlobal(packageOrPath);
             } else {
-                console.log(`Installing and adding ${packageOrPath} as a project dev dependency.`)
                 installResult = await this.addDevDependencies(packageOrPath);
             }
         }
     }
-
-    installing(){
-        debugger;
-    }
-
 }
 
 module.exports = Extend;

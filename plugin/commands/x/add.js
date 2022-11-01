@@ -9,12 +9,11 @@ class ExtendCmd extends SfdxtendCmd{
     static aliases = initAliases(__dirname, __filename);
     static args = [ { name: 'packageOrPath', required: true } ];
     static flagsConfig = {
-        scope: flags.enum({
-            options: ['global', 'project'],
-            description: 'extensions should run only in the current project or every in all projects ("global", default)',
-            char: 's',
-            default: 'global',
-            name: 'scope'
+        global: flags.boolean({
+            description: 'the extension will run every time the given command is executed, globally',
+            char: 'g',
+            default: false,
+            name: 'global'
         })
     }
 
@@ -29,17 +28,17 @@ class ExtendCmd extends SfdxtendCmd{
      * @param {Array<string>} positional used when explicitly extending an sfdx command
      */
     setPositional(...argv){
-        let [ packageOrPath, scopeFlag, scope ] = argv;
+        let [ packageOrPath, global ] = argv;
         this.args = { packageOrPath }
-        this.flags = { scope }
+        this.flags = { global: global ? true : false }
     }
 
     async run(lifecycle){
         let { config } = this;
         let { packageOrPath } = this.args;
-        let { scope } = this.flags;
+        let { global } = this.flags;
         let extGenPath = path.resolve(__dirname, '..', '..', '..', 'internal', 'generators', 'extend', 'index.js');
-        yo.register(extGenPath, { config, command: this._targetCmd, lifecycle, packageOrPath, scope });
+        yo.register(extGenPath, { config, command: this._targetCmd, lifecycle, packageOrPath, global });
         await yo.run();
     }
 

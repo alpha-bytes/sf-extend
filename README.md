@@ -14,12 +14,12 @@ After installing the plugin you'll be able to extend existing `sfdx` commands. Y
 
 ```sh
 # explicit syntax
-sfdx <command> --x <localPathOrNpmPackage> [-s, --scope <scope>]
+sfdx <command> --x <localPathOrNpmPackage> [-g, --global]
 # example - @alpha-bytes/sfdxtend-prettier-apex will run only when the command is executed in the current *project* (unless added globally separately)
-sfdx force:source:deploy --x @alpha-bytes/sfdxtend-prettier-apex --scope project
+sfdx force:source:deploy --x @alpha-bytes/sfdxtend-prettier-apex
 
 # implicit syntax
-sfdx x <localPathOrNpmPackage>
+sfdx x <localPathOrNpmPackage> [-g, --global]
 # example
 sfdx x @alpha-bytes/sfdxtend-polyfill
 ```
@@ -27,7 +27,7 @@ sfdx x @alpha-bytes/sfdxtend-polyfill
 where...
 - `command` is any sfdx command
 - `localPathOrNpmPackage` is a relative path to your extension module or any supported <a href="https://docs.npmjs.com/about-packages-and-modules" target="_blank">package format</a> that npm can install
-- `-s, --scope` is either of "global (default)" or "project" and indicates whether the extension runs every time the command is executed or only when it executes in the current sfdx project, respectively
+- `-g, --global` declares that the extension will be executed every time the command is run regardless of project
 
 ## Building Extensions
 An extension is any local module or npm-installable whose default export is class that extends the `Sfdxtension` class: 
