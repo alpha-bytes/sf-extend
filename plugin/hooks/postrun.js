@@ -1,3 +1,3 @@
-module.exports.default = async function(options){
-    
-}
+const { run } = require('../../lib/types/Hook');
+
+module.exports.default = run;

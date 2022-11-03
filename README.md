@@ -1,6 +1,6 @@
 # Extend `sfdx`
 
-`sfdxtend` provides a lightweight means of extending the capabilities of core `sfdx` commands. Enable your custom extensions to run before or after any cli command.
+`sfdxtend` provides a lightweight means of extending the capabilities of core `sfdx` commands. Enable your extension logic to run before / after any sfdx command.
 
 ## Installation
 Add `sfdxtend` to your cli as you would any `sfdx` plugin:
