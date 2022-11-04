@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Extend sfdx",
   "exports": {
-    ".": "./index.js"
+    ".": "./lib/types/Sfdxtension.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

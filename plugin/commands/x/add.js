@@ -1,10 +1,10 @@
-const SfdxtendCmd = require('../../../lib/types/SfdxtendCmd');
+const { SfdxCommand } = require('@salesforce/command');
 const { flags } = require('@salesforce/command');
 const initAliases = require('../../../lib/initAliases');
 const yo = require('../../../lib/yeoman');
 const path = require('path');
 
-class ExtendCmd extends SfdxtendCmd{
+class ExtendCmd extends SfdxCommand{
 
     static aliases = initAliases(__dirname, __filename);
     static args = [ { name: 'packageOrPath', required: true } ];

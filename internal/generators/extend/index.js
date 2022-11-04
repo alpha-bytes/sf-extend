@@ -1,12 +1,11 @@
 const Sfdxtension = require('../../../lib/types/Sfdxtension');
-const { configFileName } = require('../../../lib/globals');
 const cp = require('child_process');
 const validate = require('validate-npm-package-name');
 const requirePath = require('../../../lib/requireResolver');
 const { existsSync } = require('fs');
-const { mkdir, writeFile } = require('fs/promises');
 const path = require('path');
-const { addExtension } = require('../../../lib/prompt');
+const prompter = require('../../../lib/prompt');
+const configStore = require('../../../lib/types/ConfigStore')();
 
 function installGlobal(package){
     return new Promise((res, rej)=>{
@@ -34,7 +33,9 @@ class Extend extends Sfdxtension{
     constructor(...args){
         super(...args);
         let [ , sfdxContext] = args;
+        let { global } = sfdxContext;
         this.packageOrPath = sfdxContext.packageOrPath;
+        this.sfdxContext.global = global ? global : false
     }
 
     async initializing(){
@@ -45,26 +46,8 @@ class Extend extends Sfdxtension{
             return existsSync(given) ? given : this.packageOrPath;
         })();
         // set the sfdxtend config condiationally on scope, defaulting to project-level package.json
-        let configDir = this.destinationRoot(),
-            configPath = `${configDir}/package.json`;
         let { global } = this.sfdxContext;
-        if(global){
-            configDir = (()=>{
-                let { configDir } = this.sfdxContext.config;
-                let baseName = path.basename(configDir);
-
-                return configDir.replace(baseName, 'sfdxtend');
-            })();
-            configPath = `${configDir}/${configFileName}`;
-            if(!existsSync(configDir)) await mkdir(configDir);
-        }
-        // create file if it doesn't exist
-        if(!existsSync(configPath)){
-            let content = await this.readTemplate(configFileName);
-            await writeFile(configPath, content, 'utf-8');
-        }
-        // intialize a Storage instance
-        this.rc = this.createStorage(configPath);
+        this.rc = this.createStorage(global ? configStore.globalConfigPath : configStore.projectConfigPath);
     }
 
     async prompting(){
@@ -76,7 +59,7 @@ class Extend extends Sfdxtension{
         if(!cmdExtensions){
             cmdExtensions = [ this.packageOrPath ];
         } else{
-            let configs = await addExtension(id, cmdExtensions);
+            let configs = await prompter.addExtension(id, cmdExtensions);
             cmdExtensions.splice(configs.order, 0, this.packageOrPath);
         }
         // set the config
@@ -86,12 +69,11 @@ class Extend extends Sfdxtension{
     async install(){
         let { packageOrPath } = this;
         let { global } = this.sfdxContext;
-        let { root } = this.sfdxContext.config;
 
         let absPath, installResult;
         try{
             // determine if package is already installed
-            absPath = await requirePath(packageOrPath, root, global);
+            absPath = await requirePath(packageOrPath, global ? configStore.globalConfigPath : configStore.projectConfigPath);
         } catch(err){
             console.log(`${this.packageOrPath} not yet installed. Installing ${global ? 'as global package' : 'as dev dependency'}.`);
             if(this.global){
