@@ -15,6 +15,6 @@
     "yeoman-generator"
   ],
   "dependencies": {
-    "@alpha-bytes/sfdxtend": "<%= sfdxtendVersion %>"
+    "sfdxtend": "<%= sfdxtendVersion %>"
   }
 }

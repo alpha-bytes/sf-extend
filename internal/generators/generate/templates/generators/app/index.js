@@ -1,4 +1,4 @@
-const { Sfdxtension } = require('@alpha-bytes/sfdxtend');
+const { Sfdxtension } = require('sfdxtend');
 
 class <%= extName %>Sfdxtension extends Sfdxtension{
     

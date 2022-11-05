@@ -6,7 +6,7 @@
 Add `sfdxtend` to your cli as you would any `sfdx` plugin:
 
 ```sh
-sfdx plugins:install @alpha-bytes/sfdxtend
+sfdx plugins:install sfdxtend
 ```
 
 ## Usage
@@ -15,13 +15,13 @@ After installing the plugin you'll be able to extend existing `sfdx` commands. Y
 ```sh
 # explicit syntax
 sfdx <command> --x <localPathOrNpmPackage> [-g, --global]
-# example - @alpha-bytes/sfdxtend-prettier-apex will run only when the command is executed in the current *project* (unless added globally separately)
-sfdx force:source:deploy --x @alpha-bytes/sfdxtend-prettier-apex
+# example - sfdxtend-prettier-apex will run only when the command is executed in the current *project* (unless added globally separately)
+sfdx force:source:deploy --x sfdxtend-prettier-apex
 
 # implicit syntax
 sfdx x <localPathOrNpmPackage> [-g, --global]
 # example
-sfdx x @alpha-bytes/sfdxtend-polyfill
+sfdx x sfdxtend-polyfill
 ```
 
 where...
@@ -33,7 +33,7 @@ where...
 An extension is any local module or npm-installable whose default export is class that extends the `Sfdxtension` class: 
 
 ```js
-const Sfdxtension = require('@alpha-bytes/sfdxtend');
+const Sfdxtension = require('sfdxtend');
 module.exports.default = class MyExtension extends Sfdxtension{
     // your code...
 }

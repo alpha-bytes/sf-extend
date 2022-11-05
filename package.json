@@ -1,5 +1,5 @@
 {
-  "name": "@alpha-bytes/sfdxtend",
+  "name": "sfdxtend",
   "version": "0.1.0",
   "description": "Extend sfdx",
   "exports": {
