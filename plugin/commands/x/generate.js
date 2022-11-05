@@ -1,5 +1,5 @@
 const { SfdxCommand } = require('@salesforce/command');
-const generate = require('../../../lib/generateSfdxtension');
+const yo = require('../../../lib/yeoman');
 const initAliases = require('../../../lib/initAliases');
 
 class SfdxtensionGenerate extends SfdxCommand{
@@ -7,7 +7,8 @@ class SfdxtensionGenerate extends SfdxCommand{
     static aliases = initAliases(__dirname, __filename);
 
     async run(){
-        await generate();
+        yo.register(require.resolve('../../../internal/generators/generate'));
+        await yo.run();
     }
 
 }
