@@ -4,9 +4,7 @@ const glob = require('glob');
 const path = require('path/posix');
 const fs = require('fs');
 
-const GEN_SUFFIX = 'Sfdxtension';
-
-class SfdxtensionGenerator extends Generator{
+class SfdxtensionGenerator extends Sfdxtension{
 
     async initializing(){
         // add sfdxtends as project dependency
@@ -62,6 +60,10 @@ class SfdxtensionGenerator extends Generator{
             this.destinationPath(), 
             this.tmplData
         );
+    }
+
+    async installing(){
+        this.addDependencies(pkg.name);
     }
 
 }
