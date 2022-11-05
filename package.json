@@ -32,7 +32,6 @@
     "@oclif/config": "^1.18.5",
     "@salesforce/command": "^5.2.16",
     "yeoman-environment": "^3.12.1",
-    "@alpha-bytes/generator-sfdxtend": "^0.1.0",
     "inquirer": "~8.2.5"
   }
 }

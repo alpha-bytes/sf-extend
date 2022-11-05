@@ -52,8 +52,8 @@ class Extend extends Sfdxtension{
 
     async prompting(){
         // determine existing configs
-        let { lifecycle, command, global } = this.sfdxContext;
-        let { id } = command;
+        let { lifecycle, Command, global } = this.sfdxContext;
+        let { id } = Command;
         let lodashPath = `${global ? '' : 'sfdxtend.'}${lifecycle}.${id}`;
         let cmdExtensions = this.rc.getPath(lodashPath);
         if(!cmdExtensions){

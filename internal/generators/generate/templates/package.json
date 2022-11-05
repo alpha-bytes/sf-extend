@@ -1,0 +1,20 @@
+{
+  "name": "<%= extName.toLowerCase() %>",
+  "version": "<%= version %>",
+  "exports": {
+    ".": "./generators/app/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "sfdx",
+    "sfdxtend",
+    "extend",
+    "extension",
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "@alpha-bytes/sfdxtend": "<%= sfdxtendVersion %>"
+  }
+}
