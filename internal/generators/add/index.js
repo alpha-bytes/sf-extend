@@ -62,18 +62,33 @@ class Extend extends Sfdxtension{
         }
     }
 
-    async _prompting(lifecycle, id){
+    async _prompting(lifecycle, id, autoApprove=true){
+        let { packageOrPath } = this;
         let { global } = this.sfdxContext;
         let lodashPath = `${global ? '' : 'sfdxtend.'}${lifecycle}.${id}`;
-        let cmdExtensions = this.rc.getPath(lodashPath);
-        if(!cmdExtensions){
-            cmdExtensions = [ this.packageOrPath ];
-        } else{
-            let configs = await prompter.addExtension(id, cmdExtensions);
-            cmdExtensions.splice(configs.order, 0, this.packageOrPath);
+        let cmdExtensions = this.rc.getPath(lodashPath),
+            mutated = false;
+        if(!cmdExtensions || cmdExtensions.length === 0){
+            cmdExtensions = [ packageOrPath ];
+            mutated = true;
+        } else if(!cmdExtensions.includes(packageOrPath)){
+            let { order } = (await prompter.addExtension(id, cmdExtensions));
+            cmdExtensions.splice(order, 0, packageOrPath);
+            mutated = true;
         }
         // set the config
-        this.rc.setPath(lodashPath, cmdExtensions);
+        if(mutated){
+            let approved = autoApprove ? true :  
+                (await this.prompt([
+                    {
+                        name: 'approved',
+                        type: 'confirm', 
+                        default: true, 
+                        message: `Extend ${id} `
+                    }
+                ])).approved;
+            if(approved) this.rc.setPath(lodashPath, cmdExtensions);
+        }
     }
 
     async install(){
@@ -114,16 +129,53 @@ class Extend extends Sfdxtension{
         for(let cycle in lifecycle){
             let cmds = pkgJson.getPath(`sfdxtend.${cycle}`)
             if(cmds && cmds.length > 0){
-                let answer = await this.prompt([
-                    {
-                        message: `Extension has defined hooks for the ${cycle} lifecycle. Review/add now?`,
-                        type: 'confirm',
-                        name: 'review'
+                let answers;
+                const handleImplicit = async (viewCnt)=>{
+                    const message = viewCnt > 0 ?
+                        'Now what?' : `This extension would like to run ${cycle} certain sfdx commands. How would you like to review?`;
+                    return await this.prompt([
+                        {
+                            message,
+                            type: 'expand',
+                            choices: [
+                                {
+                                    key: 'a',
+                                    value: 'approve',
+                                    name: 'Approve All'
+                                },
+                                {
+                                    key: 'c', 
+                                    value: 'consolidate',
+                                    name: 'View consolidate list of commands requested for extension'
+                                },
+                                {
+                                    key: 'i',
+                                    value: 'individual',
+                                    name: 'Approve/Deny commands individually'
+                                },
+                                {
+                                    key: 'd',
+                                    value: 'deny',
+                                    name: 'Deny all'
+                                }
+                            ],
+                            name: 'decision'
+                        }
+                    ]);
+                };
+                let viewCnt = 0;
+                while(!answers || answers.decision === 'consolidate'){
+                    answers = await handleImplicit(viewCnt);
+                    if(answers.decision === 'consolidate'){
+                        console.log(cmds);
                     }
-                ]);
-                if(answer.review){
+                    viewCnt++;
+                }
+                let { decision } = answers;
+                if(decision !== 'deny'){
+                    let autoApprove = decision === 'approve';
                     for(let cmd of cmds){
-                        await this._prompting(cycle, cmd);
+                        await this._prompting(cycle, cmd, autoApprove);
                     }
                 }
             }
