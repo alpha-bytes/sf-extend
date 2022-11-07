@@ -1,12 +1,17 @@
 {
+  "author": "alpha-bytes",
   "name": "sfdxtend",
   "version": "1.0.0",
   "description": "Extend sfdx core commands",
+  "license": "MIT",
   "exports": {
     ".": "./lib/types/Sfdxtension.js"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "homepage": "https://github.com/alpha-bytes/sfdxtend#readme",
+  "bugs": "https://github.com/alpha-bytes/sfdxtend/issues",
+  "repository": "github:alpha-bytes/sfdxtend",
+  "engines": {
+    "node": "^16.18.1"
   },
   "keywords": [
     "sfdx",
@@ -26,8 +31,6 @@
       }
     }
   },
-  "author": "alpha-bytes",
-  "license": "MIT",
   "dependencies": {
     "@oclif/config": "^1.18.5",
     "@salesforce/command": "^5.2.16",
