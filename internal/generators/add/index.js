@@ -1,10 +1,11 @@
-const Sfdxtension = require('sfdxtend');
+const Sfdxtension = require('../../../lib/types/Sfdxtension');
 const cp = require('child_process');
 const validate = require('validate-npm-package-name');
 const requireResolver = require('../../../lib/requireResolver');
 const { existsSync } = require('fs');
 const path = require('path');
 const prompter = require('../../../lib/prompter');
+const { lifecycle } = require('../../../lib/globals');
 const configStore = require('../../../lib/types/ConfigStore')();
 
 function installGlobal(package){
@@ -33,9 +34,11 @@ class Extend extends Sfdxtension{
     constructor(...args){
         super(...args);
         let [ , sfdxContext] = args;
-        let { global } = sfdxContext;
+        let { Command, global } = sfdxContext;
+        this.explicit = Command !== undefined;
         this.packageOrPath = sfdxContext.packageOrPath;
         this.sfdxContext.global = global ? global : false
+        this.requireRoot = global ? configStore.globalDir : configStore.projectDir;
     }
 
     async initializing(){
@@ -51,9 +54,16 @@ class Extend extends Sfdxtension{
     }
 
     async prompting(){
-        // determine existing configs
-        let { lifecycle, Command, global } = this.sfdxContext;
-        let { id } = Command;
+        if(this.explicit){
+            // determine existing configs
+            let { lifecycle, Command } = this.sfdxContext;
+            let { id } = Command;
+            await this._prompting(lifecycle, id);
+        }
+    }
+
+    async _prompting(lifecycle, id){
+        let { global } = this.sfdxContext;
         let lodashPath = `${global ? '' : 'sfdxtend.'}${lifecycle}.${id}`;
         let cmdExtensions = this.rc.getPath(lodashPath);
         if(!cmdExtensions){
@@ -67,19 +77,55 @@ class Extend extends Sfdxtension{
     }
 
     async install(){
-        let { packageOrPath } = this;
+        let { packageOrPath, requireRoot } = this;
         let { global } = this.sfdxContext;
 
-        let absPath, installResult;
+        let installResult;
         try{
             // determine if package is already installed
-            absPath = await requireResolver(packageOrPath, global ? configStore.globalConfigPath : configStore.projectConfigPath);
+            installResult = await requireResolver(packageOrPath, requireRoot);
         } catch(err){
             console.log(`${this.packageOrPath} not yet installed. Installing ${global ? 'as global package' : 'as dev dependency'}.`);
             if(this.global){
                 installResult = await installGlobal(packageOrPath);
             } else {
                 installResult = await this.addDevDependencies(packageOrPath);
+            }
+        } finally{
+            console.log(`Successfully installed to ${installResult}`);
+        }
+    }
+
+    async end(){
+        // read installed extension's package.json file to see if it has any preconfigured command hooks
+        let { packageOrPath, requireRoot } = this;
+        let resolved = await requireResolver(packageOrPath, requireRoot),
+            dir = path.dirname(resolved),
+            pkgJson = (()=>{
+                function getFirstPkgJson(root){
+                    let pkgPath = `${root}/package.json`;
+                    
+                    return existsSync(pkgPath) ? pkgPath : getFirstPkgJson(path.resolve(root, '..'));
+                }
+                
+                return this.createStorage(getFirstPkgJson(dir));
+            })();
+
+        for(let cycle in lifecycle){
+            let cmds = pkgJson.getPath(`sfdxtend.${cycle}`)
+            if(cmds && cmds.length > 0){
+                let answer = await this.prompt([
+                    {
+                        message: `Extension has defined hooks for the ${cycle} lifecycle. Review/add now?`,
+                        type: 'confirm',
+                        name: 'review'
+                    }
+                ]);
+                if(answer.review){
+                    for(let cmd of cmds){
+                        await this._prompting(cycle, cmd);
+                    }
+                }
             }
         }
     }
