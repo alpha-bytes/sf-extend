@@ -1,7 +1,7 @@
 {
   "name": "sfdxtend",
   "version": "1.0.0",
-  "description": "Extend sfdx",
+  "description": "Extend sfdx core commands",
   "exports": {
     ".": "./lib/types/Sfdxtension.js"
   },
@@ -10,9 +10,9 @@
   },
   "keywords": [
     "sfdx",
-    "sfdx-plugin",
-    "extend",
-    "extensions"
+    "sfdx plugin",
+    "extend sfdx",
+    "sfdx extensions"
   ],
   "oclif": {
     "hooks": {
@@ -22,17 +22,16 @@
     "commands": "./sfdx-plugin/commands",
     "topics": {
       "x": {
-        "description": "Extend any sfdx command with before/after logic"
+        "description": "Extend core sfdx commands"
       }
     }
   },
-  "author": "kev4ev",
+  "author": "alpha-bytes",
   "license": "MIT",
   "dependencies": {
-    "@alpha-bytes/sfdxtension": "^0.1.0",
     "@oclif/config": "^1.18.5",
     "@salesforce/command": "^5.2.16",
-    "inquirer": "~8.2.5",
-    "yeoman-environment": "^3.12.1"
+    "yeoman-environment": "^3.12.1",
+    "yeoman-generator": "^5.7.0"
   }
 }
