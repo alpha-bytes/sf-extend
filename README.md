@@ -30,14 +30,15 @@ where...
 - `-g, --global` declares that the extension will be executed every time the command is run; when this flag is omitted the scope will default to `project`-level extension
 
 ### Scope
-As shown above, the `-g, --global` flag adds a global configuration so that the extension will run every time the command(s) are executed, regardless of project. The config file resides in your machine's default XSD config directory (e.g. `~/.config/`) as provided by the oclif framework (which `sfdx` runs within).
+As shown above, the `-g, --global` flag adds a global configuration so that the extension will run every time the command(s) are executed. The config file resides in your machine's default XDG config directory (e.g. `~/.config/`) as provided by the oclif framework. 
 
-When the `global` option is not provided, `sfdxtend` will append the configurations to the `package.json` file of the directory from which the command was run. If the directory is not a valid `sfdx` project structure (it has either no `sfdx-project.json` or `package.json` file) an error will be thrown.
+When the `global` option is not provided `sfdxtend` will attempt to locate a `package.json` file in the current working directory and append the extension config to it. If the directory is not a valid `sfdx` project structure, either becuase it has no `sfdx-project.json` or no `package.json` file, an error will be thrown.
 
 ## Building Extensions
-An extension is any local module or npm package whose default export is class that extends the `Sfdxtension` class: 
+An extension is any local module or npm package whose default export is a class extending the `Sfdxtension` class, as such: 
 
 ```js
+// /generators/app/index.js
 const Sfdxtension = require('sfdxtend');
 module.exports.default = class MyExtension extends Sfdxtension{
     // your code...
