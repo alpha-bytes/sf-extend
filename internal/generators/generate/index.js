@@ -1,4 +1,4 @@
-const Sfdxtension = require('../../../lib/types/Sfdxtension');
+const Sfdxtension = require('@alpha-bytes/sfdxtension');
 const pkg = require('../../../package.json');
 const glob = require('glob');
 const path = require('path/posix');
@@ -6,11 +6,11 @@ const fs = require('fs');
 
 class SfdxtensionGenerator extends Sfdxtension{
 
-    async initializing(){
-        // add sfdxtends as project dependency
+    initializing(){
         let { version } = pkg;
-        // await this.addDependencies(dep);
-        this.tmplData = { sfdxtendVersion: version }
+        this.tmplData = {
+            version
+        };
     }
     
     async prompting(){
@@ -41,9 +41,9 @@ class SfdxtensionGenerator extends Sfdxtension{
                 }
             },
             {
-                name: 'version',
+                name: 'extVersion',
                 message: 'What is the version?',
-                default: '0.1.0'
+                default: '1.0.0'
             }
         ]);
         Object.assign(this.tmplData, answers);
@@ -63,7 +63,13 @@ class SfdxtensionGenerator extends Sfdxtension{
     }
 
     async installing(){
-        this.addDependencies(pkg.name);
+        // switch dir and alert env for config change
+        this.destinationRoot(this.tmplData.directory);
+        this.env.cwd = this.destinationPath();
+        // set dependency
+        let { name, version } = pkg;
+        await this.addDependencies({ [name]: version });
+        this.packageJson.save();
     }
 
 }

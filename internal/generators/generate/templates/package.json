@@ -1,6 +1,6 @@
 {
   "name": "<%= extName.toLowerCase() %>",
-  "version": "<%= version %>",
+  "version": "<%= extVersion %>",
   "exports": {
     ".": "./generators/app/index.js"
   },
@@ -15,6 +15,6 @@
     "yeoman-generator"
   ],
   "dependencies": {
-    "sfdxtend": "<%= sfdxtendVersion %>"
+    "sfdxtend": "^<%= version %>"
   }
 }

@@ -29,9 +29,10 @@
   "author": "kev4ev",
   "license": "MIT",
   "dependencies": {
+    "@alpha-bytes/sfdxtension": "^0.1.0",
     "@oclif/config": "^1.18.5",
     "@salesforce/command": "^5.2.16",
-    "yeoman-environment": "^3.12.1",
-    "inquirer": "~8.2.5"
+    "inquirer": "~8.2.5",
+    "yeoman-environment": "^3.12.1"
   }
 }

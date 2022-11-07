@@ -1,4 +1,4 @@
-const Sfdxtension = require('../../../lib/types/Sfdxtension');
+const Sfdxtension = require('@alpha-bytes/sfdxtension');
 const cp = require('child_process');
 const validate = require('validate-npm-package-name');
 const requirePath = require('../../../lib/requireResolver');
