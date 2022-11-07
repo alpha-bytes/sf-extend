@@ -16,10 +16,10 @@
   ],
   "oclif": {
     "hooks": {
-      "prerun": "./plugin/hooks/prerun.js",
-      "postrun": "./plugin/hooks/postrun.js"
+      "prerun": "./sfdx-plugin/hooks/prerun.js",
+      "postrun": "./sfdx-plugin/hooks/postrun.js"
     },
-    "commands": "./plugin/commands",
+    "commands": "./sfdx-plugin/commands",
     "topics": {
       "x": {
         "description": "Extend sfdx"
