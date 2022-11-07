@@ -1,7 +1,7 @@
-const Sfdxtension = require('@alpha-bytes/sfdxtension');
+const Sfdxtension = require('sfdxtend');
 const cp = require('child_process');
 const validate = require('validate-npm-package-name');
-const requirePath = require('../../../lib/requireResolver');
+const requireResolver = require('../../../lib/requireResolver');
 const { existsSync } = require('fs');
 const path = require('path');
 const prompter = require('../../../lib/prompter');
@@ -73,7 +73,7 @@ class Extend extends Sfdxtension{
         let absPath, installResult;
         try{
             // determine if package is already installed
-            absPath = await requirePath(packageOrPath, global ? configStore.globalConfigPath : configStore.projectConfigPath);
+            absPath = await requireResolver(packageOrPath, global ? configStore.globalConfigPath : configStore.projectConfigPath);
         } catch(err){
             console.log(`${this.packageOrPath} not yet installed. Installing ${global ? 'as global package' : 'as dev dependency'}.`);
             if(this.global){

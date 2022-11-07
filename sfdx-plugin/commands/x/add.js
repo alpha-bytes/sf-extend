@@ -37,7 +37,7 @@ class ExtendCmd extends SfdxCommand{
         let { config } = this;
         let { packageOrPath } = this.args;
         let { global } = this.flags;
-        let extGenPath = path.resolve(__dirname, '..', '..', '..', 'internal', 'generators', 'extend', 'index.js');
+        let extGenPath = path.resolve(__dirname, '..', '..', '..', 'internal', 'generators', 'add', 'index.js');
         yo.register(extGenPath, { config, Command: this._targetCmd, lifecycle, packageOrPath, global });
         await yo.run();
     }

@@ -22,7 +22,7 @@
     "commands": "./sfdx-plugin/commands",
     "topics": {
       "x": {
-        "description": "Extend sfdx"
+        "description": "Extend any sfdx command with before/after logic"
       }
     }
   },
