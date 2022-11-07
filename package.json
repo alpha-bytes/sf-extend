@@ -1,7 +1,7 @@
 {
   "author": "alpha-bytes",
   "name": "sfdxtend",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Extend sfdx core commands",
   "license": "MIT",
   "exports": {
@@ -11,7 +11,7 @@
   "bugs": "https://github.com/alpha-bytes/sfdxtend/issues",
   "repository": "github:alpha-bytes/sfdxtend",
   "engines": {
-    "node": "^16.18.1"
+    "node": "^16.0.0"
   },
   "keywords": [
     "sfdx",
