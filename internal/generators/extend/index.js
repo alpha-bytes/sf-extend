@@ -4,7 +4,7 @@ const validate = require('validate-npm-package-name');
 const requirePath = require('../../../lib/requireResolver');
 const { existsSync } = require('fs');
 const path = require('path');
-const prompter = require('../../../lib/prompt');
+const prompter = require('../../../lib/prompter');
 const configStore = require('../../../lib/types/ConfigStore')();
 
 function installGlobal(package){
