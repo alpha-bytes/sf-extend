@@ -34,11 +34,12 @@ class Extend extends Sfdxtension{
     constructor(...args){
         super(...args);
         let [ , sfdxContext] = args;
-        let { Command, global } = sfdxContext;
+        let { attachLifecycle, Command, global } = sfdxContext;
         this.explicit = Command !== undefined;
         this.packageOrPath = sfdxContext.packageOrPath;
-        this.sfdxContext.global = global ? global : false
+        this.global = global;
         this.requireRoot = global ? configStore.globalDir : configStore.projectDir;
+        this.attachLifecycle = attachLifecycle;
     }
 
     async initializing(){
@@ -49,23 +50,35 @@ class Extend extends Sfdxtension{
             return existsSync(given) ? given : this.packageOrPath;
         })();
         // set the sfdxtend config condiationally on scope, defaulting to project-level package.json
-        let { global } = this.sfdxContext;
+        let { global } = this;
         this.rc = this.createStorage(global ? configStore.globalConfigPath : configStore.projectConfigPath);
     }
 
     async prompting(){
         if(this.explicit){
             // determine existing configs
-            let { lifecycle, Command } = this.sfdxContext;
+            let { attachLifecycle, Command } = this.sfdxContext;
             let { id } = Command;
-            await this._prompting(lifecycle, id);
+            await this._prompting(id);
         }
     }
 
-    async _prompting(lifecycle, id, autoApprove=true){
+    async _prompting(id, attachLifecycle=this.attachLifecycle, autoApprove=true){
+        if(!attachLifecycle){
+            attachLifecycle = (await this.prompt([
+                {
+                    name: 'attachLifecycle',
+                    message: 'When do you want extension to run?',
+                    choices: Object.keys(lifecycle),
+                    default: lifecycle.after,
+                    type: 'list'
+                }
+            ])).attachLifecycle;
+            this.attachLifecycle = attachLifecycle;
+        }
         let { packageOrPath } = this;
-        let { global } = this.sfdxContext;
-        let lodashPath = `${global ? '' : 'sfdxtend.'}${lifecycle}.${id}`;
+        let { global } = this;
+        let lodashPath = `${global ? '' : 'sfdxtend.'}${attachLifecycle}.${id}`;
         let cmdExtensions = this.rc.getPath(lodashPath),
             mutated = false;
         if(!cmdExtensions || cmdExtensions.length === 0){
@@ -93,7 +106,7 @@ class Extend extends Sfdxtension{
 
     async install(){
         let { packageOrPath, requireRoot } = this;
-        let { global } = this.sfdxContext;
+        let { global } = this;
 
         let installResult;
         try{

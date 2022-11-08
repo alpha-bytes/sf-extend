@@ -1,5 +1,6 @@
 const { SfdxCommand } = require('@salesforce/command');
 const { flags } = require('@salesforce/command');
+const { lifecycle } = require('../../../lib/globals');
 const initAliases = require('../../../lib/initAliases');
 const yo = require('../../../lib/yeoman');
 const path = require('path');
@@ -8,14 +9,25 @@ class ExtendCmd extends SfdxCommand{
 
     static aliases = initAliases(__dirname, __filename);
     static args = [ { name: 'packageOrPath', required: true } ];
-    static flagsConfig = {
-        global: flags.boolean({
-            description: 'the extension will run every time the given command is executed, globally',
-            char: 'g',
-            default: false,
-            name: 'global'
-        })
-    }
+    static flagsConfig = (()=>{
+        let flagsObj = {
+            global: flags.boolean({
+                description: 'the extension will run every time the given command is executed, globally',
+                char: 'g',
+                default: false,
+                name: 'global'
+            })
+        }; 
+        for(let evt in lifecycle){
+            flagsObj[evt] = flags.boolean({
+                description: `Extension should run ${evt} the provided command.`,
+                char: `${evt[0]}`,
+                name: evt
+            });
+        }
+
+        return flagsObj;
+    })();
 
     /**
      * @param {SfdxCommand} cmd used when explicitly extending an sfdx command
@@ -25,20 +37,32 @@ class ExtendCmd extends SfdxCommand{
     }
 
     /**
-     * @param {Array<string>} positional used when explicitly extending an sfdx command
+     * allows prerun script to set context as if command was directly invoked
      */
-    setPositional(...argv){
-        let [ packageOrPath, global ] = argv;
-        this.args = { packageOrPath }
-        this.flags = { global: global ? true : false }
+    setOpts(args, flags){
+        this.args = args;
+        this.flags = flags;
     }
 
-    async run(lifecycle){
+    async run(){
         let { config } = this;
+        let Command = this._targetCmd;
         let { packageOrPath } = this.args;
-        let { global } = this.flags;
+        let { global, before, after } = this.flags;
         let extGenPath = path.resolve(__dirname, '..', '..', '..', 'internal', 'generators', 'add', 'index.js');
-        yo.register(extGenPath, { config, Command: this._targetCmd, lifecycle, packageOrPath, global });
+        yo.register(extGenPath, { 
+            config, 
+            Command, 
+            lifecycle: lifecycle.before,
+            packageOrPath, 
+            global, 
+            attachLifecycle: (()=>{
+                if(before) return lifecycle.before;
+                if(after) return lifecycle.after;
+                
+                return undefined;
+            })()
+        });
         await yo.run();
     }
 
