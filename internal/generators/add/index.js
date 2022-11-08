@@ -49,7 +49,7 @@ class Extend extends Sfdxtension{
 
             return existsSync(given) ? given : this.packageOrPath;
         })();
-        // set the sfdxtend config condiationally on scope, defaulting to project-level package.json
+        // set the sf-x config condiationally on scope, defaulting to project-level package.json
         let { global } = this;
         if(!global && !configStore.projectConfigPath){
             throw new Error('Project-scoped extensions can only be added from an sfdx project directory')
@@ -81,7 +81,7 @@ class Extend extends Sfdxtension{
         }
         let { packageOrPath } = this;
         let { global } = this;
-        let lodashPath = `${global ? '' : 'sfdxtend.'}${attachLifecycle}.${id}`;
+        let lodashPath = `${global ? '' : 'sf-x.'}${attachLifecycle}.${id}`;
         let cmdExtensions = this.rc.getPath(lodashPath),
             mutated = false;
         if(!cmdExtensions || cmdExtensions.length === 0){
@@ -143,7 +143,7 @@ class Extend extends Sfdxtension{
             })();
 
         for(let cycle in lifecycle){
-            let cmds = pkgJson.getPath(`sfdxtend.${cycle}`)
+            let cmds = pkgJson.getPath(`sf-x.${cycle}`)
             if(cmds && cmds.length > 0){
                 let answers;
                 const handleImplicit = async (viewCnt)=>{

@@ -9,12 +9,12 @@
   },
   "keywords": [
     "sfdx",
-    "sfdxtend",
+    "sf-x",
     "extend",
     "extension",
     "yeoman-generator"
   ],
   "dependencies": {
-    "sfdxtend": "^<%= version %>"
+    "sf-x": "^<%= version %>"
   }
 }

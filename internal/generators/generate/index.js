@@ -1,4 +1,4 @@
-const Sfdxtension = require('sfdxtend');
+const Sfdxtension = require('sf-x');
 const pkg = require('../../../package.json');
 const glob = require('glob');
 const path = require('path/posix');
