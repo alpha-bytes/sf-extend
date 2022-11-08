@@ -1,7 +1,7 @@
-const Sfdxtension = require('sf-x');
+const Sfdxtension = require('sf-extend');
 
 /**
- * sf-x extension class. The Sfdxtension class which is this class's prototype
+ * sf-extend extension class. The Sfdxtension class which is this class's prototype
  * itself extends the Yeoman Generator class. It's runtime context methods (https://yeoman.io/authoring/running-context.html) 
  * are included in runtime order in comment blocks below for convenience. At least one method must be implemented
  * or an exception will be thrown when the class executes.

@@ -1,15 +1,15 @@
 # Extend core salesforce cli commands
 
-`sf-x` provides a lightweight means of extending the capabilities of core salesforce cli commands. Configure extensions to run before or after any core command. Installable to both the `sf` and `sfdx` clis.
+`sf-extend` provides a lightweight means of extending the capabilities of core salesforce cli commands. Configure extensions to run before or after any core command. Installable to both the `sf` and `sfdx` clis.
 
 ## Installation
-Add `sf-x` to your cli as you would any `sfdx` plugin:
+Add `sf-extend` to your cli as you would any `sfdx` plugin:
 
 ```sh
 # sfdx
-sfdx plugins:install sf-x
+sfdx plugins:install sf-extend
 # sf
-sf plugins install sf-x
+sf plugins install sf-extend
 ```
 
 ## Usage
@@ -19,12 +19,12 @@ Extending an `sfdx` command is a simple process. You can choose to extend comman
 # syntax - explicit extension
 sfdx <command> --extend <localPathOrNpmPackage> [-g, --global]
 # example
-sfdx force:source:deploy --extend @alpha-bytes/sf-x-prettier-on-deploy
+sfdx force:source:deploy --extend @alpha-bytes/sf-extend-prettier-on-deploy
 
 # syntax - implicit extension
 sfdx x:add <localPathOrNpmPackage> [-g, --global]
 # example 
-sfdx x:add @alpha-bytes/sf-x-prettier-on-deploy
+sfdx x:add @alpha-bytes/sf-extend-prettier-on-deploy
 ```
 
 where...
@@ -35,20 +35,20 @@ where...
 ### Scope
 As shown above, the `-g, --global` flag adds a global configuration so that the extension will run every time the command(s) are executed. The config file resides in your machine's default XDG config directory (e.g. `~/.config/`) as provided by the oclif framework. 
 
-When the `global` option is not provided `sf-x` will attempt to locate a `package.json` file in the current working directory and append the extension config to it. If the directory is not a valid `sfdx` project structure, either becuase it has no `sfdx-project.json` or no `package.json` file, an error will be thrown.
+When the `global` option is not provided `sf-extend` will attempt to locate a `package.json` file in the current working directory and append the extension config to it. If the directory is not a valid `sfdx` project structure, either becuase it has no `sfdx-project.json` or no `package.json` file, an error will be thrown.
 
 ## Building Extensions
 An extension is any local module or npm package whose default export is a class extending the `Sfdxtension` class, as such: 
 
 ```js
 // /generators/app/index.js
-const Sfdxtension = require('sf-x');
+const Sfdxtension = require('sf-extend');
 module.exports.default = class MyExtension extends Sfdxtension{
     // your code...
 }
 ```
 
-To get you started quickly, `sf-x` includes a generator command that which will scaffold a new extension for you. Run the following from the directory where you want to begin building:
+To get you started quickly, `sf-extend` includes a generator command that which will scaffold a new extension for you. Run the following from the directory where you want to begin building:
 
 ```sh
 sfdx x:generate [PATH]
@@ -57,7 +57,7 @@ sfdx x:generate [PATH]
 The command will ask you a few questions (similar to running `force:project:create`) in your to scaffold a simple extension directory for you. 
 
 ### Extension Architecture
-Under the hood `sf-x` utilizes the popular **Yeomanjs** scaffolding library. Salesforce utilizes this as well when you run commands such as `sfdx force:project:create` and `sfdx plugins:generate`.
+Under the hood `sf-extend` utilizes the popular **Yeomanjs** scaffolding library. Salesforce utilizes this as well when you run commands such as `sfdx force:project:create` and `sfdx plugins:generate`.
 
 The extension classes you'll create extend the `Sfdxtension` class which itself extends the Yeoman `Generator` class, so all of the really smart functionality available to you therein is accessible in your class.
 
@@ -69,7 +69,7 @@ Extensions can define the commands they wish to extend and whether they should r
 ```jsonc
 {
     //...
-    "sf-x": {
+    "sf-extend": {
         "before|after": [ "command:id:0", "..." ]
     }//...
 }
@@ -77,14 +77,14 @@ Extensions can define the commands they wish to extend and whether they should r
 ```
 
 ## Sharing and Finding Extensions
-If you'd like to share your awesome creations with the rest of the world simply publish your package to npm using the format `sf-x-<yourExtensionName>`.
+If you'd like to share your awesome creations with the rest of the world simply publish your package to npm using the format `sf-extend-<yourExtensionName>`.
 
 <!-- ### Community Extensions -->
 
 ## FAQ
 
 **How is an extension different than a plugin?**\
-_An `sfdx` plugin adds additional commands to the base cli that a user must call manually. An `sf-x` extension, on the other hand, allows you to automatically execute logic before/after core commands without the need for manual user invocation._
+_An `sfdx` plugin adds additional commands to the base cli that a user must call manually. An `sf-extend` extension, on the other hand, allows you to automatically execute logic before/after core commands without the need for manual user invocation._
 
 **Can I extend custom plugin commands?**
 _Technically, yes, though the Inquirer prompts that walk the user through installation only list out core commands, so you need to configure the package.json (or global config file) manually._

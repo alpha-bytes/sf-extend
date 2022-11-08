@@ -1,15 +1,15 @@
 {
   "author": "alpha-bytes",
-  "name": "sf-x",
+  "name": "sf-extend",
   "version": "1.1.0",
   "description": "Extend core salesforce cli commands",
   "license": "MIT",
   "exports": {
     ".": "./lib/types/Sfdxtension.js"
   },
-  "homepage": "https://github.com/alpha-bytes/sf-x#readme",
-  "bugs": "https://github.com/alpha-bytes/sf-x/issues",
-  "repository": "github:alpha-bytes/sf-x",
+  "homepage": "https://github.com/alpha-bytes/sf-extend#readme",
+  "bugs": "https://github.com/alpha-bytes/sf-extend/issues",
+  "repository": "github:alpha-bytes/sf-extend",
   "engines": {
     "node": "^16.0.0"
   },
