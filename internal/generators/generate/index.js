@@ -1,7 +1,7 @@
 const Sfdxtension = require('sf-extend');
 const pkg = require('../../../package.json');
 const glob = require('glob');
-const path = require('path/posix');
+const path = require('path');
 const fs = require('fs');
 
 class SfdxtensionGenerator extends Sfdxtension{
