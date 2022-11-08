@@ -51,6 +51,9 @@ class Extend extends Sfdxtension{
         })();
         // set the sfdxtend config condiationally on scope, defaulting to project-level package.json
         let { global } = this;
+        if(!global && !configStore.projectConfigPath){
+            throw new Error('Project-scoped extensions can only be added from an sfdx project directory')
+        }
         this.rc = this.createStorage(global ? configStore.globalConfigPath : configStore.projectConfigPath);
     }
 
