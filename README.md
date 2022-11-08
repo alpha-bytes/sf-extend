@@ -1,4 +1,4 @@
-# Extend `sfdx` Core Commands
+# Extend core salesforce cli commands
 
 `sf-x` provides a lightweight means of extending the capabilities of core salesforce cli commands. Configure extensions to run before or after any core command. Installable to both the `sf` and `sfdx` clis.
 
