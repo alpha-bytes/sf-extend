@@ -1,12 +1,15 @@
 # Extend `sfdx` Core Commands
 
-`sfdxtend` provides a lightweight means of extending the capabilities of core `sfdx` commands. Configure your extension to run before or after any core command.
+`sfdxtend` provides a lightweight means of extending the capabilities of core salesforce cli commands. Configure extensions to run before or after any core command. Installable to both the `sf` and `sfdx` clis.
 
 ## Installation
 Add `sfdxtend` to your cli as you would any `sfdx` plugin:
 
 ```sh
+# sfdx
 sfdx plugins:install sfdxtend
+# sf
+sf plugins install sfdxtend
 ```
 
 ## Usage

@@ -2,7 +2,7 @@
   "author": "alpha-bytes",
   "name": "sfdxtend",
   "version": "1.1.0",
-  "description": "Extend sfdx core commands",
+  "description": "Extend core salesforce cli commands",
   "license": "MIT",
   "exports": {
     ".": "./lib/types/Sfdxtension.js"
