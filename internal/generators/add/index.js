@@ -38,7 +38,6 @@ class Extend extends Sfdxtension{
         this.explicit = Command !== undefined;
         this.packageOrPath = sfdxContext.packageOrPath;
         this.global = global;
-        this.requireRoot = global ? configStore.globalDir : configStore.projectDir;
         this.attachLifecycle = attachLifecycle;
     }
 
@@ -108,13 +107,13 @@ class Extend extends Sfdxtension{
     }
 
     async install(){
-        let { packageOrPath, requireRoot } = this;
+        let { packageOrPath } = this;
         let { global } = this;
 
         let installResult;
         try{
             // determine if package is already installed
-            installResult = await requireResolver(packageOrPath, requireRoot);
+            installResult = await requireResolver(packageOrPath);
         } catch(err){
             console.log(`${this.packageOrPath} not yet installed. Installing ${global ? 'as global package' : 'as dev dependency'}.`);
             if(this.global){
@@ -129,8 +128,8 @@ class Extend extends Sfdxtension{
 
     async end(){
         // read installed extension's package.json file to see if it has any preconfigured command hooks
-        let { packageOrPath, requireRoot } = this;
-        let resolved = await requireResolver(packageOrPath, requireRoot),
+        let { packageOrPath } = this;
+        let resolved = await requireResolver(packageOrPath),
             dir = path.dirname(resolved),
             pkgJson = (()=>{
                 function getFirstPkgJson(root){
