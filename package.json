@@ -13,10 +13,14 @@
   "engines": {
     "node": "^16.0.0"
   },
+  "scripts": {
+    "prepublishOnly": "read -p 'release type (major|minor|patch): ' RELEASE_TYPE && RELEASE_TYPE=$RELEASE_TYPE node scripts/prepublishOnly.js"
+  },
   "keywords": [
     "sfdx",
+    "@salesforce/cli",
+    "salesforce cli",
     "sfdx plugin",
-    "extend sfdx",
     "sfdx extensions"
   ],
   "oclif": {

@@ -1,5 +1,5 @@
 const { SfdxCommand } = require('@salesforce/command');
-const yo = require('../../../lib/yeoman');
+const yo = require('../../../lib/types/YeomanEnv')();
 const initAliases = require('../../../lib/initAliases');
 
 class SfdxtensionGenerate extends SfdxCommand{

@@ -2,7 +2,7 @@ const { SfdxCommand } = require('@salesforce/command');
 const { flags } = require('@salesforce/command');
 const { lifecycle } = require('../../../lib/globals');
 const initAliases = require('../../../lib/initAliases');
-const yo = require('../../../lib/yeoman');
+const yo = require('../../../lib/types/YeomanEnv')();
 const path = require('path');
 
 class ExtendCmd extends SfdxCommand{
