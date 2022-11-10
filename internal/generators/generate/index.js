@@ -14,28 +14,30 @@ class SfdxtensionGenerator extends Sfdxtension{
     }
     
     async prompting(){
-        let extNameClosure = 'MySfdxtension';
-        let answers = await this.prompt([
+        let answers = {},
+            defName = 'MySfdxtension';
+        Object.assign(answers, await this.prompt([
             {
                 name: 'extName',
                 message: 'What is the name of your extension?',
-                default: extNameClosure,
+                default: defName,
                 filter: (val) => {
                     if(val && val.length > 0){
                         let trimmed = val.replace(/\s/g, ''),
                             cleaned = `${trimmed.charAt(0).toUpperCase()}${trimmed.slice(1)}`;
 
-                        extNameClosure = cleaned;
                         return cleaned;
                     }
 
-                    return extNameClosure;
+                    return defName;
                 }
-            },
+            }
+        ]));
+        Object.assign(answers, await this.prompt([
             {
                 name: 'directory',
                 message: 'Which directory?',
-                default: extNameClosure,
+                default: answers.extName.toLowerCase(),
                 filter: (val) => {
                     return path.resolve(process.cwd(), val);
                 }
@@ -45,7 +47,7 @@ class SfdxtensionGenerator extends Sfdxtension{
                 message: 'What is the version?',
                 default: '1.0.0'
             }
-        ]);
+        ]));
         Object.assign(this.tmplData, answers);
     }
 
