@@ -16,8 +16,5 @@
   ],
   "dependencies": {
     "sf-extension": "^<%= baseVersion.split('.')[0].replace('^','') %>.x"
-  },
-  "peerDependencies": {
-    "<%= pkg.name %>": "^<%= pkg.version.split('.')[0] %>.x"
   }
 }
