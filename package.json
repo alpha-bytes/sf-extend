@@ -38,6 +38,7 @@
     "dependencies": {
         "@oclif/config": "^1.18.5",
         "@salesforce/command": "^5.2.16",
+        "sf-extension": "^1.0.0",
         "yargs-parser": "^21.1.1",
         "yeoman-environment": "^3.12.1",
         "yeoman-generator": "^5.7.0"

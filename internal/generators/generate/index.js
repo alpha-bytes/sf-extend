@@ -1,4 +1,4 @@
-const SfExtension = require('sf-extension');
+const SfExtension = require('yeoman-generator');
 const pkg = require('../../../package.json');
 const glob = require('glob');
 const path = require('path');
@@ -7,12 +7,14 @@ const fs = require('fs');
 class SfExtensionGenerator extends SfExtension{
 
     initializing(){
-        let { name, version } = pkg;
+        let { name, version, dependencies } = pkg;
+        let baseVersion = dependencies['sf-extension'];
         this.tmplData = {
             pkg: {
                 name,
                 version
-            }
+            }, 
+            baseVersion
         };
     }
     
@@ -68,12 +70,9 @@ class SfExtensionGenerator extends SfExtension{
     }
 
     async installing(){
-        // switch dir and alert env for config change
+        // switch dir and alert env to trigger installs
         this.destinationRoot(this.tmplData.directory);
         this.env.cwd = this.destinationPath();
-        // set dependency
-        let { name, version } = pkg;
-        await this.addDependencies({ [name]: version });
         this.packageJson.save();
     }
 

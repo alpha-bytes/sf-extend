@@ -190,7 +190,7 @@ class Extend extends SfExtension{
                 if(decision !== 'deny'){
                     let autoApprove = decision === 'approve';
                     for(let cmd of cmds){
-                        await this._prompting(cycle, cmd, autoApprove);
+                        await this._prompting(cmd, cycle, autoApprove);
                     }
                 }
             }
