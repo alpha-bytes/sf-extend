@@ -5,7 +5,7 @@
     "description": "Extend core salesforce cli commands",
     "license": "MIT",
     "exports": {
-        ".": "./lib/types/Sfdxtension.js"
+        ".": "./package.json"
     },
     "homepage": "https://github.com/alpha-bytes/sf-extend#readme",
     "bugs": "https://github.com/alpha-bytes/sf-extend/issues",

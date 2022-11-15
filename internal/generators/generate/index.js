@@ -1,21 +1,24 @@
-const Sfdxtension = require('sf-extend');
+const SfExtension = require('sf-extension');
 const pkg = require('../../../package.json');
 const glob = require('glob');
 const path = require('path');
 const fs = require('fs');
 
-class SfdxtensionGenerator extends Sfdxtension{
+class SfExtensionGenerator extends SfExtension{
 
     initializing(){
-        let { version } = pkg;
+        let { name, version } = pkg;
         this.tmplData = {
-            version
+            pkg: {
+                name,
+                version
+            }
         };
     }
     
     async prompting(){
         let answers = {},
-            defName = 'MySfdxtension';
+            defName = 'MySfExtension';
         Object.assign(answers, await this.prompt([
             {
                 name: 'extName',
@@ -76,4 +79,4 @@ class SfdxtensionGenerator extends Sfdxtension{
 
 }
 
-module.exports = SfdxtensionGenerator;
+module.exports = SfExtensionGenerator;

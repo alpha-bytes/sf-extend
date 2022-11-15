@@ -2,7 +2,7 @@ const { SfdxCommand } = require('@salesforce/command');
 const yo = require('../../../lib/types/YeomanEnv')();
 const initAliases = require('../../../lib/initAliases');
 
-class SfdxtensionGenerate extends SfdxCommand{
+class SfExtensionGenerate extends SfdxCommand{
 
     static aliases = initAliases(__dirname, __filename);
 
@@ -13,4 +13,4 @@ class SfdxtensionGenerate extends SfdxCommand{
 
 }
 
-module.exports = SfdxtensionGenerate;
+module.exports = SfExtensionGenerate;

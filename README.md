@@ -38,12 +38,12 @@ As shown above, the `-g, --global` flag adds a global configuration so that the 
 When the `global` option is not provided `sf-extend` will attempt to locate a `package.json` file in the current working directory and append the extension config to it. If the directory is not a valid `sfdx` project structure, either becuase it has no `sfdx-project.json` or no `package.json` file, an error will be thrown.
 
 ## Building Extensions
-An extension is any local module or npm package whose default export is a class extending the `Sfdxtension` class, as such: 
+An extension is any local module or npm package whose default export is a class extending the `SfExtension` class, as such: 
 
 ```js
 // /generators/app/index.js
-const Sfdxtension = require('sf-extend');
-module.exports.default = class MyExtension extends Sfdxtension{
+const SfExtension = require('sf-extend');
+module.exports.default = class MyExtension extends SfExtension{
     // your code...
 }
 ```
@@ -59,7 +59,7 @@ The command will ask you a few questions (similar to running `force:project:crea
 ### Extension Architecture
 Under the hood `sf-extend` utilizes the popular **Yeomanjs** scaffolding library. Salesforce utilizes this as well when you run commands such as `sfdx force:project:create` and `sfdx plugins:generate`.
 
-The extension classes you'll create extend the `Sfdxtension` class which itself extends the Yeoman `Generator` class, so all of the really smart functionality available to you therein is accessible in your class.
+The extension classes you'll create extend the `SfExtension` class which itself extends the Yeoman `Generator` class, so all of the really smart functionality available to you therein is accessible in your class.
 
 Before beginning make sure to peruse the Yeoman <a href="https://yeoman.io/authoring/index.html" target="_blank">authoring documentation</a> which is generally concise and approachable.
 

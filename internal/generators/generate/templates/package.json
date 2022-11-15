@@ -14,7 +14,7 @@
     "extension",
     "yeoman-generator"
   ],
-  "dependencies": {
-    "sf-extend": "^<%= version %>"
+  "peerDependencies": {
+    "<%= pkg.name %>": "^<%= pkg.version.split('.')[0] %>.x"
   }
 }

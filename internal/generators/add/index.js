@@ -1,4 +1,4 @@
-const Sfdxtension = require('../../../lib/types/Sfdxtension');
+const SfExtension = require('sf-extension');
 const cp = require('child_process');
 const validate = require('validate-npm-package-name');
 const requireResolver = require('../../../lib/requireResolver');
@@ -29,7 +29,7 @@ function installGlobal(package){
     });
 }
 
-class Extend extends Sfdxtension{
+class Extend extends SfExtension{
 
     constructor(...args){
         super(...args);
@@ -48,7 +48,7 @@ class Extend extends Sfdxtension{
 
             return existsSync(given) ? given : this.packageOrPath;
         })();
-        // set the sf-extend config condiationally on scope, defaulting to project-level package.json
+        // set the sf-extend config conditionally on scope, defaulting to project-level package.json
         let { global } = this;
         if(!global && !configStore.projectConfigPath){
             throw new Error('Project-scoped extensions can only be added from an sfdx project directory')

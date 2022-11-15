@@ -1,12 +1,12 @@
-const Sfdxtension = require('sf-extend');
+const SfExtension = require('sf-extension');
 
 /**
- * sf-extend extension class. The Sfdxtension class which is this class's prototype
+ * sf-extend extension class. The SfExtension class which is this class's prototype
  * itself extends the Yeoman Generator class. It's runtime context methods (https://yeoman.io/authoring/running-context.html) 
  * are included in runtime order in comment blocks below for convenience. At least one method must be implemented
  * or an exception will be thrown when the class executes.
  */
-class <%= extName %>Sfdxtension extends Sfdxtension{
+class <%= extName %>SfExtension extends SfExtension{
     /** initializing(){
         Your initialization methods (checking current project state, getting configs, etc)
     } **/
@@ -41,4 +41,4 @@ class <%= extName %>Sfdxtension extends Sfdxtension{
 
 }
 
-module.exports = <%= extName %>Sfdxtension;
+module.exports = <%= extName %>SfExtension;
