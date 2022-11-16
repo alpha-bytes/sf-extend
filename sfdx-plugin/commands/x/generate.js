@@ -7,7 +7,11 @@ class SfExtensionGenerate extends SfdxCommand{
     static aliases = initAliases(__dirname, __filename);
 
     async run(){
-        yo.register(require.resolve('../../../internal/generators/generate'));
+        let { config } = this;
+        yo.register(require.resolve('../../../internal/generators/generate'), {
+            config,
+            Command: SfExtensionGenerate
+        });
         await yo.run();
     }
 

@@ -1,10 +1,16 @@
-const SfExtension = require('yeoman-generator');
+const SfExtension = require('sf-extension');
 const pkg = require('../../../package.json');
 const glob = require('glob');
 const path = require('path');
 const fs = require('fs');
+const { lifecycle } = require('../../../lib/globals');
 
 class SfExtensionGenerator extends SfExtension{
+
+    constructor(args, opts){
+        super(args, opts);
+        this.commands = Array.from(this.sfdxContext.config._commands.keys()).sort();
+    }
 
     initializing(){
         let { name, version, dependencies } = pkg;
@@ -14,13 +20,19 @@ class SfExtensionGenerator extends SfExtension{
                 name,
                 version
             }, 
-            baseVersion
+            baseVersion,
+            config: Object.keys(lifecycle).reduce((prev, curr) => {
+                if(curr) prev[curr] = [];
+                
+                return prev;
+            }, {})
         };
     }
     
     async prompting(){
         let answers = {},
             defName = 'MySfExtension';
+        // get basic configs
         Object.assign(answers, await this.prompt([
             {
                 name: 'extName',
@@ -53,7 +65,31 @@ class SfExtensionGenerator extends SfExtension{
                 default: '1.0.0'
             }
         ]));
+        // write full answers to tmplData
         Object.assign(this.tmplData, answers);
+        // get commands for extension to attach to
+        let { config } = this.tmplData;
+        for(let when in lifecycle){
+            let proceed = (await this.prompt([
+                {
+                    name: 'proceed',
+                    type: 'confirm',
+                    message: `Do you want to prescribe any commands for your extension to run **${when.toUpperCase()}**?`
+                }
+            ])).proceed;
+            if(proceed){
+                let { commands } = this;
+                config[when] = (await this.prompt([
+                    {
+                        choices: commands,
+                        message: `Select commands for your extension to run ${when}`,
+                        name: 'extends',
+                        pageSize: 10,
+                        type: 'checkbox'
+                    }
+                ])).extends;
+            }
+        }
     }
 
     async writing(){

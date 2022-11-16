@@ -16,5 +16,6 @@
   ],
   "dependencies": {
     "sf-extension": "^<%= baseVersion.split('.')[0].replace('^','') %>.x"
-  }
+  },
+  "<%- pkg.name.toLowerCase() %>": <%- JSON.stringify(config, undefined, 4) %>
 }
