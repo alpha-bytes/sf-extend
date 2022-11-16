@@ -33,10 +33,10 @@ class Extend extends SfExtension{
 
     constructor(...args){
         super(...args);
-        let [ , sfdxContext] = args;
-        let { attachLifecycle, Command, global } = sfdxContext;
+        let [ , sfContext] = args;
+        let { attachLifecycle, Command, global } = sfContext;
         this.explicit = Command !== undefined;
-        this.packageOrPath = sfdxContext.packageOrPath;
+        this.packageOrPath = sfContext.packageOrPath;
         this.global = global;
         this.attachLifecycle = attachLifecycle;
     }
@@ -59,7 +59,7 @@ class Extend extends SfExtension{
     async prompting(){
         if(this.explicit){
             // determine existing configs
-            let { attachLifecycle, Command } = this.sfdxContext;
+            let { attachLifecycle, Command } = this.sfContext;
             let { id } = Command;
             await this._prompting(id);
         }
