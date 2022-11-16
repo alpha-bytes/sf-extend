@@ -54,6 +54,8 @@ class Extend extends SfExtension{
             throw new Error('Project-scoped extensions can only be added from an sfdx project directory')
         }
         this.rc = this.createStorage(global ? configStore.globalConfigPath : configStore.projectConfigPath);
+        // set forceOverwrite
+        this.forceOverwrite = true;
     }
 
     async prompting(){
@@ -110,26 +112,31 @@ class Extend extends SfExtension{
         let { packageOrPath } = this;
         let { global } = this;
 
-        let installResult;
+        let installResult, exists = false;
         try{
             // determine if package is already installed
-            installResult = await requireResolver(packageOrPath);
+            installResult = await requireResolver(packageOrPath, global ? false : true);
+            exists = true;
         } catch(err){
             console.log(`${this.packageOrPath} not yet installed. Installing ${global ? 'as global package' : 'as dev dependency'}.`);
             if(this.global){
                 installResult = await installGlobal(packageOrPath);
             } else {
-                installResult = await this.addDevDependencies(packageOrPath);
+                try{
+                    installResult = await this.addDevDependencies(packageOrPath);
+                } catch(err){
+                    throw err;
+                }
             }
         } finally{
-            console.log(`Successfully installed to ${installResult}`);
+            console.log(`${exists ? 'Existing' : 'New'} extension ${exists ? 'resolved' : 'installed'} to ${installResult}`);
         }
     }
 
     async end(){
         // read installed extension's package.json file to see if it has any preconfigured command hooks
-        let { packageOrPath } = this;
-        let resolved = await requireResolver(packageOrPath),
+        let { global, packageOrPath } = this;
+        let resolved = await requireResolver(packageOrPath, global ? false : true),
             dir = path.dirname(resolved),
             pkgJson = (()=>{
                 function getFirstPkgJson(root){

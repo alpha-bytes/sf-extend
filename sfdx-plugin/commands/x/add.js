@@ -50,7 +50,7 @@ class ExtendCmd extends SfdxCommand{
         let { packageOrPath } = this.args;
         let { global, before, after } = this.flags;
         let extGenPath = path.resolve(__dirname, '..', '..', '..', 'internal', 'generators', 'add', 'index.js');
-        yo.register(extGenPath, { 
+        await yo.register(extGenPath, { 
             config, 
             Command, 
             lifecycle: lifecycle.before,
@@ -63,7 +63,7 @@ class ExtendCmd extends SfdxCommand{
                 return undefined;
             })()
         });
-        await yo.run();
+        await yo.run(false);
     }
 
 }

@@ -8,11 +8,11 @@ class SfExtensionGenerate extends SfdxCommand{
 
     async run(){
         let { config } = this;
-        yo.register(require.resolve('../../../internal/generators/generate'), {
+        await yo.register(require.resolve('../../../internal/generators/generate'), {
             config,
             Command: SfExtensionGenerate
         });
-        await yo.run();
+        await yo.run(false);
     }
 
 }

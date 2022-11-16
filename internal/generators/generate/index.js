@@ -10,7 +10,6 @@ class SfExtensionGenerator extends SfExtension{
     constructor(args, opts){
         super(args, opts);
         this.commands = Array.from(this.sfContext.config._commands.keys()).sort();
-        this.forceOverwrite = true;
     }
 
     initializing(){
@@ -96,6 +95,7 @@ class SfExtensionGenerator extends SfExtension{
     async writing(){
         // set conflicter options
         this.forceOverwrite = true;
+        // write template data
         let { directory } = this.tmplData;
         if(!fs.existsSync(directory)){
             fs.mkdirSync(directory);
